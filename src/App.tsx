@@ -43,15 +43,16 @@ export default function App() {
   return (
     <div
     className="bgPattern flex flex-col"
-    style={{ minHeight: "100vh" }}
+    style={{ minHeight: "100vh"}}
   >
     <div
-      className="badge pt-10 px-4 flex flex-col items-center text-gray-100"
+      className="badge pt-10 px-4 flex flex-col items-center text-gray-100 text-main"
       style={{
         color: "#ddd",
         fontSize: "80px",
         fontFamily: "monospace",
         fontWeight: "bold",
+          zIndex: 99,
       }}
     >
       GitFolio
@@ -125,7 +126,8 @@ export default function App() {
 async function fetchStreakData(username: string) {
   try {
     // Use the username variable to dynamically fetch the user's events
-    const response = await fetch(`https://api.github.com/users/${username}/events/public`);
+    const response = await fetch(``);
+    //https://api.github.com/users/${username}/events/public
 
     if (!response.ok) {
       throw new Error('Failed to fetch events');
