@@ -15,10 +15,7 @@ export interface GitHubBadgeProps {
   commits: number;
   activityScore: number;
   contributionLevel: string;
-  streak: {
-    current: number;
-    longest: number;
-  };
+  streak: number;
   badges: string[];
 }
 
@@ -37,9 +34,6 @@ export function GitHubBadge({
   contributionLevel,
   streak,
   badges,
-
-
-  
 }: GitHubBadgeProps) {
   return (
     <div className="w-full max-w-sm bg-[#161b22] rounded-md shadow-xl overflow-hidden border border-gray-800 badge" style={{maxWidth:'375px'}}>
