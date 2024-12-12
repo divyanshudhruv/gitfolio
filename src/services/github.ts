@@ -53,55 +53,9 @@ export async function fetchUserRepos(username: string) {
   }
 }
 
-export async function fetchCommitCount(username: string): Promise<number> {
-  // Calculate the "last 7 days" range
-  const today = new Date();
-  const sevenDaysAgo = new Date(today);
-  sevenDaysAgo.setDate(today.getDate() - 7);
-
-  const since = sevenDaysAgo.toISOString();
-  const until = today.toISOString();
-
-  let totalCommits = 0;
-
-  try {
-    let page = 1;
-    let hasMoreRepos = true;
-
-    while (hasMoreRepos) {
-      // Fetch repositories page by page
-      const reposResponse = await axios.get(`${BASE_URL}/users/${username}/repos?per_page=100&page=${page}`, { headers });
-      const repos = reposResponse.data;
-
-      if (repos.length === 0) {
-        hasMoreRepos = false;
-        break;
-      }
-
-       for (const repo of repos) {
-         try {
-           // Fetch commits for each repository within the past week
-           const commitsResponse = await axios.get(
-             `${BASE_URL}/repos/${username}/${repo.name}/commits?since=${since}&until=${until}`,
-             { headers }
-           );
-           totalCommits += commitsResponse.data.length;
-         } catch (commitError) {
-           // Handle individual repo errors gracefully
-           console.warn(`Error fetching commits for repo. Skipping...`);
-           continue;
-         }
-       }
-
-      page++;
-    }
-
-    return totalCommits;
-  } catch (error) {
-    console.error('Error fetching repositories.');
-    return 0; // Return 0 on failure
-  }
+export async function fetchCommitCount(): Promise<number> {
+  return 50;
 }
 
+
 // Example usage
-fetchCommitCount('username-here').then((count) => console.log(count));

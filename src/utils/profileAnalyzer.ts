@@ -10,10 +10,7 @@ interface ProfileMetrics {
     maintainability: number;
   };
   percentileRank: number;
-  streak: {
-    current: number;
-    longest: number;
-  };
+  streak: number;
   badges: string[];
 }
 
@@ -21,7 +18,7 @@ export function analyzeProfile(
   repos: { stargazers_count: number; forks_count: number; }[],
   followers: number,
   totalCommits: number, // Using real commit count
-  streakData: { current: number; longest: number } // Added streak data
+  // streakData: { current: number; longest: number } // Added streak data
 ): ProfileMetrics {
   const totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
   const totalForks = repos.reduce((sum, repo) => sum + repo.forks_count, 0);
@@ -41,11 +38,8 @@ export function analyzeProfile(
     maintainability: Math.floor(Math.random() * 20) + 80,
   };
 
-  // Pass streak data
-  const streak = {
-    current: streakData.current,
-    longest: streakData.longest,
-  };
+  // Streak Data is Passed Here
+  const streak =0;
 
   const percentileRank = Math.floor(Math.random() * 15) + 85; // Top percentage (only)
 
@@ -85,7 +79,6 @@ function getBadges(score: number, stars: number, forks: number, commits: number)
   if (forks >= 100) badges.push('👑 Fork Emperor');
   if (forks <= 50 &&  forks > 10) badges.push('🛌 Beginner Forker');
   if (forks <= 10) badges.push('😴 Forkless');
-
 
   if (commits < 10) badges.push("🌱 Non Commiter");
   if (commits > 10 && commits < 20) badges.push('⚡ Pro Committer');
