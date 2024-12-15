@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@octokit/graphql": "^8.1.1",
-    "axios": "^1.6.7",
+    "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "graphql-request": "^7.1.2",
     "lucide-react": "^0.344.0",

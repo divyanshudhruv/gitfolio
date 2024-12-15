@@ -53,9 +53,80 @@ export async function fetchUserRepos(username: string) {
   }
 }
 
-export async function fetchCommitCount(): Promise<number> {
-  return 50;
+
+const GITHUB_GRAPHQL_API = "https://api.github.com/graphql";
+const PAT = process.env.GITHUB_PAT; // Load the PAT from environment variables
+
+  if (!PAT) {
+    throw new Error("GitHub PAT is missing. Ensure it's set in environment variables.");
+  }
+interface GraphQLResponse {
+  data: {
+    user: {
+      repositories: {
+        edges: Array<{
+          node: {
+            defaultBranchRef: {
+              target: {
+                history: {
+                  totalCount: number;
+                };
+              };
+            };
+          };
+        }>;
+      };
+    };
+  };
 }
 
+export async function fetchCommitCount(username: string): Promise<number> {
+  const query = `
+    query($username: String!) {
+  user(login: $username) {
+    repositories(first: 100, isFork: false) {
+      edges {
+        node {
+          defaultBranchRef {
+            target {
+              ... on Commit {
+                history {
+                  totalCount
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+  `;
 
-// Example usage
+  const variables = { username };
+
+  try {
+    const response = await axios.post<GraphQLResponse>(
+      GITHUB_GRAPHQL_API,
+      { query, variables },
+      {
+        headers: {
+          Authorization: `Bearer ${PAT}`, // Authenticate using the PAT
+          Accept: "application/json",
+        },
+      }
+    );
+
+    const repositories = response.data.data.user.repositories.edges;
+    const totalCommits = repositories.reduce((sum, repo) => {
+      const commits =
+        repo.node.defaultBranchRef?.target?.history?.totalCount || 0;
+      return sum + commits;
+    }, 0);
+
+    return totalCommits;
+  } catch (error) {
+    console.error("Error fetching commits:", error);
+    throw error;
+  }
+}

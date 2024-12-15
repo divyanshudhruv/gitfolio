@@ -26,7 +26,7 @@ export default function App() {
     try {
       const profile = await fetchGitHubProfile(username);
       const repos = await fetchUserRepos(username);
-      const commits = await fetchCommitCount(); // TODO: (username)
+      const commits = await fetchCommitCount(username);
       // const streakData = await fetchStreakData(username);
 
       const metrics = analyzeProfile(

@@ -26,7 +26,7 @@ export function analyzeProfile(
   // Calculate activity score based on real commit count
   const activityScore = Math.min(
     Math.round(
-      (totalStars * 2 + totalForks * 3 + followers + totalCommits / 10) / 7.2
+      (totalStars * 2 + totalForks * 3 + followers + totalCommits / 100) / 7.2
     ),
     100
   );
@@ -65,7 +65,7 @@ function getBadges(score: number, stars: number, forks: number, commits: number)
   if (score >= 70 && score < 60) badges.push('🎖️ Rising Star');
   if (score <= 60 && score >30) badges.push("🥉 Hard Working");
   if (score <= 30 && score >20) badges.push('🚶‍♂️ Slow Starter');
-  if (score <= 20) badges.push("🐸 Beginner");
+  if (score <= 20) badges.push("👀 Starter");
 
   if (stars >= 30 && stars < 80) badges.push('⭐ Star Collector');
   if (stars >= 80 && stars < 100) badges.push('☄️ Supernova');
