@@ -55,7 +55,7 @@ export async function fetchUserRepos(username: string) {
 
 
 const GITHUB_GRAPHQL_API = "https://api.github.com/graphql";
-const PAT = process.env.GITHUB_PAT; // Load the PAT from environment variables
+const PAT = ""; // Load the PAT from environment variables
 
   if (!PAT) {
     throw new Error("GitHub PAT is missing. Ensure it's set in environment variables.");
