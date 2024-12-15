@@ -55,11 +55,8 @@ export async function fetchUserRepos(username: string) {
 
 
 const GITHUB_GRAPHQL_API = "https://api.github.com/graphql";
-const PAT = ""; // Load the PAT from environment variables
 
-  if (!PAT) {
-    throw new Error("GitHub PAT is missing. Ensure it's set in environment variables.");
-  }
+// GraphQL response type
 interface GraphQLResponse {
   data: {
     user: {
@@ -80,18 +77,32 @@ interface GraphQLResponse {
   };
 }
 
+/**
+ * Fetch the total number of commits by a GitHub user across their repositories.
+ * 
+ * @param username - GitHub username
+ * @returns Total number of commits by the user
+ */
 export async function fetchCommitCount(username: string): Promise<number> {
+  const GITHUB_PAT = process.env.GITHUB_PAT; // Use env variable for server-side
+
+  if (!GITHUB_PAT) {
+    throw new Error("GitHub PAT is missing. Ensure it's set in environment variables.");
+  }
+
   const query = `
     query($username: String!) {
-  user(login: $username) {
-    repositories(first: 100, isFork: false) {
-      edges {
-        node {
-          defaultBranchRef {
-            target {
-              ... on Commit {
-                history {
-                  totalCount
+      user(login: $username) {
+        repositories(first: 100, isFork: false) {
+          edges {
+            node {
+              defaultBranchRef {
+                target {
+                  ... on Commit {
+                    history {
+                      totalCount
+                    }
+                  }
                 }
               }
             }
@@ -99,8 +110,6 @@ export async function fetchCommitCount(username: string): Promise<number> {
         }
       }
     }
-  }
-}
   `;
 
   const variables = { username };
@@ -111,14 +120,16 @@ export async function fetchCommitCount(username: string): Promise<number> {
       { query, variables },
       {
         headers: {
-          Authorization: `Bearer ${PAT}`, // Authenticate using the PAT
+          Authorization: `Bearer ${GITHUB_PAT}`,
           Accept: "application/json",
         },
       }
     );
 
+    // Explicitly typing the result of the reduce function
     const repositories = response.data.data.user.repositories.edges;
-    const totalCommits = repositories.reduce((sum, repo) => {
+
+    const totalCommits = repositories.reduce((sum: number, repo) => {
       const commits =
         repo.node.defaultBranchRef?.target?.history?.totalCount || 0;
       return sum + commits;
