@@ -84,7 +84,7 @@ interface GraphQLResponse {
  * @returns Total number of commits by the user
  */
 export async function fetchCommitCount(username: string): Promise<number> {
-  const GITHUB_PAT = process.env.GITHUB_PAT; // Use env variable for server-side
+  const GITHUB_PAT = import.meta.env.VITE_GITHUB_PAT; // Use env variable for server-side
 
   if (!GITHUB_PAT) {
     throw new Error("GitHub PAT is missing. Ensure it's set in environment variables.");
