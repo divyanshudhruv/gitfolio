@@ -10,6 +10,7 @@ interface GitHubStatsProps {
   activityScore: number;
   contributionLevel: string;
   streak: number;
+  longestStreak: number;
   badges: string[];
 }
 
@@ -22,6 +23,7 @@ export function GitHubStats({
   contributionLevel,
   badges,
   streak,
+  longestStreak,
 }: GitHubStatsProps) {
   return (
     <div className="space-y-3">
@@ -41,17 +43,13 @@ export function GitHubStats({
           value={forks}
           label="Forks"
         />
-        {/* <StatBadge
-          icon={<GitCommit className="w-3 h-5 mr-1" />}
-          value={commits}
-          label="Commits"
-        /> */}
         <div className="flex items-center gap-1.5 bg-[#21262d] text-white rounded-md p-2">
-        <GitCommit className="w-3 h-5 mr-1" />      <div>
-        <div className="text-xs font-medium">{formatNumber(commits)}+</div>
-        <div className="text-xs text-gray-400">Commits</div>
-      </div>
-    </div>
+          <GitCommit className="w-3 h-5 mr-1" />{" "}
+          <div>
+            <div className="text-xs font-medium">{formatNumber(commits)}+</div>
+            <div className="text-xs text-gray-400">Commits</div>
+          </div>
+        </div>
       </div>
 
       <div
@@ -76,7 +74,9 @@ export function GitHubStats({
           <Flame className="w-4 h-4 text-orange-400" />
           <div>
             <div className="text-xs font-medium">{streak} Day Streak</div>
-            <div className="text-xs text-gray-400">Longest: {'>'}10 days</div>
+            <div className="text-xs text-gray-400">
+              Longest: {longestStreak} days
+            </div>
           </div>
         </div>
         <div className="text-right">

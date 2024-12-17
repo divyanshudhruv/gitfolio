@@ -79,8 +79,12 @@ body {
   font-weight: lighter;
   color: #7f869180;
   text-align: center;
+  transition: .3s;
 }
 
+.footer a:hover{
+color: #9ca5b480;
+}
 .api-usage {
   position: fixed;
   top: 10px;

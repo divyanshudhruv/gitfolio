@@ -1,10 +1,11 @@
-// App.tsx
 import React, { useState } from "react";
 import { GitHubBadge } from "./components/GitHubBadge/GitHubBadge";
 import {
   fetchCommitCount,
   fetchGitHubProfile,
   fetchUserRepos,
+  fetchCurrentStreak,
+  fetchHighestStreak, 
 } from "./services/github";
 import { analyzeProfile } from "./utils/profileAnalyzer";
 import { Search } from "lucide-react";
@@ -24,22 +25,21 @@ export default function App() {
     setError("");
 
     try {
+      // Fetch data for profile, repos, commits, current streak, and highest streak
       const profile = await fetchGitHubProfile(username);
       const repos = await fetchUserRepos(username);
       const commits = await fetchCommitCount(username);
-      // const streakData = await fetchStreakData(username);
+      const streakData = await fetchCurrentStreak(username); 
+      const highestStreakData = await fetchHighestStreak(username); 
 
-      const metrics = analyzeProfile(
-        repos,
-        profile.followers,
-        commits,
-        // streakData
-      );
+      const metrics = analyzeProfile(repos, profile.followers, commits);
 
       setProfileData({
         ...profile,
         ...metrics,
         totalCommits: commits,
+        streak: streakData,
+        highestStreak: highestStreakData, 
       });
     } catch (err) {
       setError("User not found or API rate limit exceeded");
@@ -100,9 +100,7 @@ export default function App() {
             name={profileData.name || profileData.login}
             avatar={profileData.avatar_url}
             bio={profileData.bio || ""}
-            location={
-              profileData.location ? `${profileData.location}` : "unknown"
-            }
+            location={profileData.location ? `${profileData.location}` : "unknown"}
             blog={profileData.blog ? `${profileData.blog}` : "none"}
             followers={profileData.followers}
             stars={profileData.totalStars}
@@ -110,7 +108,8 @@ export default function App() {
             commits={profileData.totalCommits}
             activityScore={profileData.activityScore}
             contributionLevel={profileData.contributionLevel}
-            streak={profileData.streak}
+            streak={profileData.streak} 
+            longestStreak={profileData.highestStreak} 
             badges={profileData.badges}
           />
         )}

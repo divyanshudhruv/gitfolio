@@ -18,7 +18,6 @@ export function analyzeProfile(
   repos: { stargazers_count: number; forks_count: number; }[],
   followers: number,
   totalCommits: number, // Using real commit count
-  // streakData: { current: number; longest: number } // Added streak data
 ): ProfileMetrics {
   const totalStars = repos.reduce((sum, repo) => sum + repo.stargazers_count, 0);
   const totalForks = repos.reduce((sum, repo) => sum + repo.forks_count, 0);
@@ -38,7 +37,6 @@ export function analyzeProfile(
     maintainability: Math.floor(Math.random() * 20) + 80,
   };
 
-  // Streak Data is Passed Here
   const streak =0;
 
   const percentileRank = Math.floor(Math.random() * 15) + 85; // Top percentage (only)
