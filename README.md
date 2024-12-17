@@ -18,7 +18,7 @@ Easily generate dynamic GitHub profile cards with real-time stats like **commits
 <br>
 
 > [!NOTE]
-> The activity score is based on your **stars**, **forks**, **commits**, and **followers** only. `The total commits are based on the last 7 days.`
+> The activity score is based on your **stars**, **forks**, **commits**, and **followers** only. The **`score`** is calculated using a **`custom algorithm`**.
 
 <br>
 
@@ -30,13 +30,13 @@ GitFolio is a dynamic GitHub profile card generator designed to showcase **key**
 
 ## ✏️ Upcoming Features
 
-- **`Realtime Streak`**: Real-time streak updates.
+- [x]  **`Realtime Streak`**: Real-time streak updates.
   
-- **`Interactive Graphs`**: Visualize the activity using graphs.
+- [ ] **`Interactive Graphs`**: Visualize the activity using graphs.
 
-- **`Top Repostories`**: List of top repositories.
+- [ ] **`Top Repostories`**: List of top repositories.
 
-- **`API Integration`**: API metrics for even deeper insights.
+- [ ] **`API Integration`**: API metrics for even deeper insights.
 
 <br>
 
@@ -44,7 +44,7 @@ GitFolio is a dynamic GitHub profile card generator designed to showcase **key**
 
 - **`Frontend`**: React, Tailwind CSS, Axios
 
-- **`Backend`**: GitHub API
+- **`Backend`**: GitHub API, GraphQL
 
 - **`Tools`**: TypeScript, Vite
 
@@ -63,6 +63,7 @@ We welcome contributions to GitCard! Feel free to open issues or submit pull req
 
 
 ## 🔐 Security
+
 > [!NOTE]
-> If you notice any security issues, leaks, or anything that seems off regarding the security of this project, please open a **`PULL REQUEST`** and reference the security issue. 
+> If you notice any security issues, PAT leaks, or anything that seems off regarding the security of this project, please open a **`PULL REQUEST`** and reference the security issue. 
 

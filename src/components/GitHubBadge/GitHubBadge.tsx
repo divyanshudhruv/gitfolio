@@ -16,6 +16,7 @@ export interface GitHubBadgeProps {
   activityScore: number;
   contributionLevel: string;
   streak: number;
+  longestStreak: number; 
   badges: string[];
 }
 
@@ -23,7 +24,7 @@ export function GitHubBadge({
   username,
   name,
   avatar,
- bio,
+  bio,
   location,
   blog,
   followers,
@@ -33,10 +34,11 @@ export function GitHubBadge({
   activityScore,
   contributionLevel,
   streak,
+  longestStreak, 
   badges,
 }: GitHubBadgeProps) {
   return (
-    <div className="w-full max-w-sm bg-[#161b22] rounded-md shadow-xl overflow-hidden border border-gray-800 badge" style={{maxWidth:'375px'}}>
+    <div className="w-full max-w-sm bg-[#161b22] rounded-md shadow-xl overflow-hidden border border-gray-800 badge" style={{ maxWidth: '375px' }}>
       <div className="p-5">
         <div className="flex items-start gap-3">
           <img
@@ -44,24 +46,21 @@ export function GitHubBadge({
             alt={`${username}'s avatar`}
             className="w-12 h-12 rounded-full border border-gray-800"
           />
-          <div className="flex-1 min-w-0" style={{paddingTop:'5px'}}>
+          <div className="flex-1 min-w-0" style={{ paddingTop: '5px' }}>
             <ProfileInfo name={name} username={username} bio={bio} />
           </div>
         </div>
-        
+
         <div className="mt-3 space-y-2">
           {location && (
-            <div className="flex items-center text-gray-400" >
+            <div className="flex items-center text-gray-400">
               <MapPin className="w-3 h-3 mr-1" />
               <span className="text-xs">{location}</span>
             </div>
           )}
-          
+
           {blog && (
-            <div
-              className="flex items-center text-gray-400"
-              style={{ marginBottom: "20px" }}
-            >
+            <div className="flex items-center text-gray-400" style={{ marginBottom: '20px' }}>
               <LinkIcon className="w-3 h-3 mr-1" />
               <a
                 href={blog.startsWith('http') ? blog : `https://${blog}`}
@@ -73,6 +72,7 @@ export function GitHubBadge({
               </a>
             </div>
           )}
+
           <GitHubStats
             followers={followers}
             stars={stars}
@@ -82,9 +82,10 @@ export function GitHubBadge({
             contributionLevel={contributionLevel}
             streak={streak}
             badges={badges}
-          />
+            longestStreak={longestStreak}
+          />         
         </div>
-        
+
         <a
           href={`https://github.com/${username}`}
           target="_blank"

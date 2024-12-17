@@ -77,12 +77,6 @@ interface GraphQLResponse {
   };
 }
 
-/**
- * Fetch the total number of commits by a GitHub user across their repositories.
- * 
- * @param username - GitHub username
- * @returns Total number of commits by the user
- */
 export async function fetchCommitCount(username: string): Promise<number> {
   const GITHUB_PAT = import.meta.env.VITE_GITHUB_PAT; // Use env variable for server-side
 
@@ -138,6 +132,117 @@ export async function fetchCommitCount(username: string): Promise<number> {
     return totalCommits;
   } catch (error) {
     console.error("Error fetching commits:", error);
+    throw error;
+  }
+}
+
+export async function fetchCurrentStreak(username: string): Promise<number> {
+  const query = `
+    query($username: String!) {
+      user(login: $username) {
+        contributionsCollection {
+          contributionCalendar {
+            weeks {
+              contributionDays {
+                contributionCount
+                date
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const variables = { username };
+
+  try {
+    const response = await axios.post(
+      "https://api.github.com/graphql",
+      { query, variables },
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_GITHUB_PAT}`, // use environment variable
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const weeks = response.data.data.user.contributionsCollection.contributionCalendar.weeks;
+    const days = weeks.flatMap((week: any) => week.contributionDays);
+
+    // Calculate streak
+    let streak = 0;
+    for (let i = days.length - 1; i >= 0; i--) {
+      if (days[i].contributionCount > 0) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+
+    return streak; 
+  } catch (error) {
+    console.error("Error fetching streak:", error);
+    throw error;
+  }
+}
+
+
+export async function fetchHighestStreak(username: string): Promise<number> {
+  const query = `
+    query($username: String!) {
+      user(login: $username) {
+        contributionsCollection {
+          contributionCalendar {
+            weeks {
+              contributionDays {
+                contributionCount
+                date
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  const variables = { username };
+
+  try {
+    const response = await axios.post(
+      "https://api.github.com/graphql",
+      { query, variables },
+      {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_GITHUB_PAT}`, // use environment variable
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const weeks = response.data.data.user.contributionsCollection.contributionCalendar.weeks;
+    const days = weeks.flatMap((week: any) => week.contributionDays);
+
+    // Calculate highest streak
+    let maxStreak = 0;
+    let currentStreak = 0;
+
+    for (let i = 0; i < days.length; i++) {
+      if (days[i].contributionCount > 0) {
+        currentStreak++;
+      } else {
+        maxStreak = Math.max(maxStreak, currentStreak);
+        currentStreak = 0;
+      }
+    }
+
+    // Final comparison in case the longest streak is at the end of the data
+    maxStreak = Math.max(maxStreak, currentStreak);
+
+    return maxStreak; 
+  } catch (error) {
+    console.error("Error fetching highest streak:", error);
     throw error;
   }
 }
