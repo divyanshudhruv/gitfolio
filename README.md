@@ -17,7 +17,7 @@ Easily generate dynamic GitHub profile cards with real-time stats like **commits
 
 <br>
 
-> [!NOTE]
+> [!NOTE]\
 > The activity score is based on your **stars**, **forks**, **commits**, and **followers** only. The **`score`** is calculated using a **`custom algorithm`**.
 
 <br>
