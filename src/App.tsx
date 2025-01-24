@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, createRef } from "react";
+import { useScreenshot } from 'use-react-screenshot';
 import { GitHubBadge } from "./components/GitHubBadge/GitHubBadge";
 import {
   fetchCommitCount,
@@ -10,12 +11,26 @@ import {
 import { analyzeProfile } from "./utils/profileAnalyzer";
 import { Search } from "lucide-react";
 import APIUsage from "./services/ApiUsage";
+import { createFileName } from 'use-react-screenshot';
 
 export default function App() {
   const [username, setUsername] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [profileData, setProfileData] = useState<any>(null);
+  const ref = createRef<HTMLDivElement>();
+  const [, takeScreenShot] = useScreenshot({
+    type: "image/jpeg",
+    quality: 1.0
+  });
+  const download = (image: string, { name = "img", extension = "jpg" } = {}) => {
+    const a = document.createElement("a");
+    a.href = image;
+    a.download = createFileName(extension, name);
+    a.click();
+  };
+
+  const downloadScreenshot = () => takeScreenShot(ref.current).then(download);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -95,23 +110,30 @@ export default function App() {
         </div>
         <br />
         {profileData && (
-          <GitHubBadge
-            username={profileData.login}
-            name={profileData.name || profileData.login}
-            avatar={profileData.avatar_url}
-            bio={profileData.bio || ""}
-            location={profileData.location ? `${profileData.location}` : "unknown"}
-            blog={profileData.blog ? `${profileData.blog}` : "none"}
-            followers={profileData.followers}
-            stars={profileData.totalStars}
-            forks={profileData.totalForks}
-            commits={profileData.totalCommits}
-            activityScore={profileData.activityScore}
-            contributionLevel={profileData.contributionLevel}
-            streak={profileData.streak} 
-            longestStreak={profileData.highestStreak} 
-            badges={profileData.badges}
-          />
+          <div ref={ref}>
+            <GitHubBadge
+              username={profileData.login}
+              name={profileData.name || profileData.login}
+              avatar={profileData.avatar_url}
+              bio={profileData.bio || ""}
+              location={profileData.location ? `${profileData.location}` : "unknown"}
+              blog={profileData.blog ? `${profileData.blog}` : "none"}
+              followers={profileData.followers}
+              stars={profileData.totalStars}
+              forks={profileData.totalForks}
+              commits={profileData.totalCommits}
+              activityScore={profileData.activityScore}
+              contributionLevel={profileData.contributionLevel}
+              streak={profileData.streak} 
+              longestStreak={profileData.highestStreak} 
+              badges={profileData.badges}
+            />
+          </div>
+        )}
+        {profileData && (
+          <button onClick={downloadScreenshot} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md">
+            Download Stats
+          </button>
         )}
       </div>
       <br />
